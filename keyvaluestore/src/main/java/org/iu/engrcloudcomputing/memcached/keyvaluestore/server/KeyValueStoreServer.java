@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.invoke.MethodHandles;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -20,13 +18,13 @@ public class KeyValueStoreServer {
     private static UniqueLinkedBlockingQueue<String> blockingQueue = new UniqueLinkedBlockingQueue<>();
     private static ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
 
-    public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         //init
-        readAndWriteFromFile(args[0]);
+        readAndWriteFromFile();
         int port = Integer.parseInt("9000");
         Server server = ServerBuilder.forPort(port)
-                .addService(new KeyValueStoreService(concurrentMap, blockingQueue, args[0])).build();
+                .addService(new KeyValueStoreService(concurrentMap, blockingQueue)).build();
         server.start();
 
         LOGGER.info("Key Value Store Server Started at {}", server.getPort());
@@ -34,9 +32,10 @@ public class KeyValueStoreServer {
 
     }
 
-    private static void readAndWriteFromFile(String filePath) throws IOException, URISyntaxException {
+    private static void readAndWriteFromFile() throws IOException {
 
-        File file = new File(new URI(filePath));
+        String filePath = "tmp.txt";
+        File file = new File(filePath);
         if (!file.exists()) {
             if (!file.createNewFile()) {
                 LOGGER.error("Couldn't create a new file {}", filePath);

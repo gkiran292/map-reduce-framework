@@ -24,17 +24,17 @@ FROM openjdk:8u181-jdk
 #EXPOSE 9000
 #CMD ["java -jar keyvaluestore-1.0-SNAPSHOT-jar-with-dependencies.jar file:///usr/src/app/tmp.txt"]
 ## ----
+FROM alpine/git as clone
+WORKDIR /app
+RUN git clone https://github.com/gkiran292/map-reduce-framework.git
 
 FROM maven:3.6.1-jdk-8 as build
 WORKDIR /app
-COPY --from=clone /app/keyvaluestore /app
+COPY --from=clone /app/map-reduce-framework/keyvaluestore /app
 RUN mvn clean compile assembly:single
 
-FROM openjdk:8-jre-alpine
-ARG artifactid
-ARG version
-ENV artifact ${artifactid}-${version}.jar
+FROM openjdk:8-jre
 WORKDIR /app
-COPY --from=build /app/target/${artifact} /app
-EXPOSE 8080
-CMD ["java -jar ${artifact}"]
+COPY --from=build /app/target/keyvaluestore-1.0-SNAPSHOT-jar-with-dependencies.jar /app
+EXPOSE 9000
+ENTRYPOINT ["java", "-jar", "keyvaluestore-1.0-SNAPSHOT-jar-with-dependencies.jar"]
