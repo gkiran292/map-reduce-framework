@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.iu.engrcloudcomputing.memcached</groupId>
-    <artifactId>keyvaluestore</artifactId>
+    <groupId>org.iu.engrcloudcomputing.mapreduce</groupId>
+    <artifactId>hadoop</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -52,6 +52,28 @@
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
             <version>1.15.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-exec</artifactId>
+            <version>1.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-process-killer</artifactId>
+            <version>1.10</version>
         </dependency>
     </dependencies>
 
@@ -113,7 +135,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.iu.engrcloudcomputing.memcached.keyvaluestore.server.KeyValueStoreServer</mainClass>
+                            <mainClass>org.iu.engrcloudcomputing.mapreduce.hadoop.Application</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

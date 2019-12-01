@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.invoke.MethodHandles;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -18,11 +20,11 @@ public class KeyValueStoreServer {
     private static UniqueLinkedBlockingQueue<String> blockingQueue = new UniqueLinkedBlockingQueue<>();
     private static ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
 
         //init
         readAndWriteFromFile(args[0]);
-        int port = Integer.parseInt("9000");
+        int port = Integer.parseInt(args[1]);
         Server server = ServerBuilder.forPort(port)
                 .addService(new KeyValueStoreService(concurrentMap, blockingQueue, args[0])).build();
         server.start();
@@ -32,13 +34,13 @@ public class KeyValueStoreServer {
 
     }
 
-    private static void readAndWriteFromFile(String filePath) throws IOException {
+    private static void readAndWriteFromFile(String filePath) throws IOException, URISyntaxException {
 
-        File file = new File(filePath);
+        File file = new File(new URI(filePath));
         if (!file.exists()) {
             if (!file.createNewFile()) {
                 LOGGER.error("Couldn't create a new file {}", filePath);
-                throw new IOException("Couldn't create a new file " + filePath);
+                throw new IOException("Couldn't create a new file tmp.txt");
             }
         }
 
