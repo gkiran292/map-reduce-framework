@@ -1,4 +1,4 @@
-FROM openjdk:8u181-jdk
+#FROM openjdk:8u181-jdk
 ## ----
 ## Install Maven
 #ARG MAVEN_VERSION=3.6.1

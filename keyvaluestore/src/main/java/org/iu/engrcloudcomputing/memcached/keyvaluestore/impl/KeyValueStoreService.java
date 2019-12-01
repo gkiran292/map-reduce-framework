@@ -21,12 +21,14 @@ public class KeyValueStoreService extends KeyValueStoreGrpc.KeyValueStoreImplBas
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
     private ConcurrentMap<String, String> concurrentMap;
     private UniqueLinkedBlockingQueue<String> blockingQueue;
+    private String filePath;
 
     public KeyValueStoreService(ConcurrentMap<String, String> concurrentMap,
-                                UniqueLinkedBlockingQueue<String> blockingQueue) {
+                                UniqueLinkedBlockingQueue<String> blockingQueue, String filePath) {
 
         this.concurrentMap = concurrentMap;
         this.blockingQueue = blockingQueue;
+        this.filePath = filePath;
     }
 
     @Override
@@ -51,7 +53,6 @@ public class KeyValueStoreService extends KeyValueStoreGrpc.KeyValueStoreImplBas
     }
 
     private void persistInFile() throws IOException, InterruptedException {
-        String filePath = "tmp.txt";
         File file = new File(filePath);
         if (!file.exists()) {
             if (!file.createNewFile()) {

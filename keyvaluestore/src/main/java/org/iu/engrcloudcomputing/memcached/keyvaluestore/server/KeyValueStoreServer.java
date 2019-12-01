@@ -21,10 +21,10 @@ public class KeyValueStoreServer {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         //init
-        readAndWriteFromFile();
+        readAndWriteFromFile(args[0]);
         int port = Integer.parseInt("9000");
         Server server = ServerBuilder.forPort(port)
-                .addService(new KeyValueStoreService(concurrentMap, blockingQueue)).build();
+                .addService(new KeyValueStoreService(concurrentMap, blockingQueue, args[0])).build();
         server.start();
 
         LOGGER.info("Key Value Store Server Started at {}", server.getPort());
@@ -32,14 +32,13 @@ public class KeyValueStoreServer {
 
     }
 
-    private static void readAndWriteFromFile() throws IOException {
+    private static void readAndWriteFromFile(String filePath) throws IOException {
 
-        String filePath = "tmp.txt";
         File file = new File(filePath);
         if (!file.exists()) {
             if (!file.createNewFile()) {
                 LOGGER.error("Couldn't create a new file {}", filePath);
-                throw new IOException("Couldn't create a new file tmp.txt");
+                throw new IOException("Couldn't create a new file " + filePath);
             }
         }
 
